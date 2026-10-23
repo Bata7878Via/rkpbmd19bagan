@@ -6,11 +6,11 @@
     <title>Sistem Terpadu RKBMD & RKPBMD Kab. Konawe TA. 2027</title>
     
     <meta name="theme-color" content="#1e3a8a">
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome 6 CDN -->
+    <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SheetJS Excel Engine CDN -->
+    <!-- SheetJS Excel Engine -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     
     <style>
@@ -31,15 +31,15 @@
 </head>
 <body class="bg-slate-100 text-slate-800 p-2 sm:p-4 md:p-6 min-h-screen relative pb-16">
 
-    <!-- OVERLAY LOADING DATABASE ONLINE -->
+    <!-- OVERLAY LOADING SINKRONISASI -->
     <div id="globalLoader" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex flex-col items-center justify-center text-white hidden">
         <div class="bg-slate-800 p-5 sm:p-6 rounded-2xl shadow-2xl flex flex-col items-center gap-3 border border-slate-700 max-w-xs text-center">
             <i class="fa-solid fa-cloud-arrow-up text-3xl sm:text-4xl text-blue-400 animate-bounce"></i>
-            <span id="globalLoaderMsg" class="text-xs sm:text-sm font-bold tracking-wide">Sinkronisasi Database Google Spreadsheet...</span>
+            <span id="globalLoaderMsg" class="text-xs sm:text-sm font-bold tracking-wide">Sinkronisasi Database Spreadsheet...</span>
         </div>
     </div>
 
-    <!-- NOTIFIKASI FLOATING (TOAST) -->
+    <!-- NOTIFIKASI TOAST -->
     <div id="toastNotification" class="fixed top-4 left-3 right-3 sm:left-auto sm:right-6 sm:w-auto z-50 flex items-center gap-3 bg-emerald-600 text-white px-5 py-3.5 rounded-2xl shadow-2xl transition-all duration-300 transform -translate-y-28 opacity-0 pointer-events-none">
         <div id="toastIconBox" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
             <i id="toastIcon" class="fa-solid fa-check text-base"></i>
@@ -61,7 +61,7 @@
                     <span class="text-xs text-blue-200 font-semibold">TA. 2027</span>
                 </div>
                 <h1 class="text-lg sm:text-2xl md:text-3xl font-black tracking-tight leading-snug">Sistem Terpadu RKBMD & RKPBMD</h1>
-                <p class="text-blue-100 text-xs sm:text-sm mt-0.5">Pemerintah Kabupaten Konawe &bull; Modul Pengadaan (12 Kolom) & Pemeliharaan (13 Kolom)</p>
+                <p class="text-blue-100 text-xs sm:text-sm mt-0.5">Pemerintah Kabupaten Konawe &bull; Modul Terpadu Pengadaan & Pemeliharaan BMD</p>
             </div>
             
             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
@@ -92,9 +92,9 @@
                 <div class="text-[10px] text-amber-500 font-medium mt-0.5">Format 13 Kolom</div>
             </div>
             <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 shadow-sm">
-                <span class="text-[10px] sm:text-xs font-bold text-emerald-600 uppercase">Total Volume / Target</span>
-                <div class="text-xl sm:text-2xl font-black text-emerald-700 mt-1" id="statTotalQty">0 Unit</div>
-                <div class="text-[10px] text-emerald-500 font-medium mt-0.5">Kebutuhan Disetujui</div>
+                <span class="text-[10px] sm:text-xs font-bold text-emerald-600 uppercase">Master Data Terhubung</span>
+                <div class="text-base sm:text-lg font-black text-emerald-700 mt-1" id="statMasterInfo">0 SKPD / 0 Barang</div>
+                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">Dari Tab Spreadsheet</div>
             </div>
         </div>
 
@@ -104,7 +104,7 @@
                 <span id="cloudStatusBadge" class="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 font-bold border border-amber-200">
                     <i class="fa-solid fa-database mr-1.5"></i> Status Database:
                 </span>
-                <span id="cloudStatus" class="text-slate-600 font-semibold">Belum Terhubung ke Apps Script</span>
+                <span id="cloudStatus" class="text-slate-600 font-semibold">Memeriksa koneksi Spreadsheet...</span>
             </div>
 
             <!-- Download Format Resmi Excel -->
@@ -132,9 +132,9 @@
                         <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-sm">
                             <i class="fa-solid fa-chart-pie"></i>
                         </span>
-                        <h2 class="font-bold text-slate-800 text-sm sm:text-base">Monitoring Kepatuhan Penginputan SKPD</h2>
+                        <h2 class="font-bold text-slate-800 text-sm sm:text-base">Monitoring Kepatuhan SKPD (Otomatis dari Tab Master)</h2>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Dihitung otomatis secara langsung dari data Google Spreadsheet.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Persentase dihitung dari perbandingan usulan masuk terhadap daftar SKPD pada tab spreadsheet Anda.</p>
                 </div>
                 <button type="button" onclick="openSkpdDetailsModal('SEMUA')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer active:scale-95 w-full sm:w-auto justify-center">
                     <i class="fa-solid fa-list-check"></i> Rincian Status SKPD
@@ -247,7 +247,7 @@
         <!-- FORM & TABEL CONTAINER -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
             
-            <!-- FORMULIR INPUT -->
+            <!-- FORMULIR INPUT DINAMIS -->
             <div class="lg:col-span-4 bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
                     <div class="flex items-center gap-2">
@@ -273,7 +273,7 @@
                         </select>
                     </div>
 
-                    <!-- IDENTITAS SKPD -->
+                    <!-- IDENTITAS SKPD (DARI SPREADSHEET) -->
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">SKPD / Unit Kerja <span class="text-rose-500">*</span></label>
                         <input type="text" id="skpd" list="skpdOptions" placeholder="Pilih atau ketik nama SKPD..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:bg-white focus:outline-none" required autocomplete="off">
@@ -295,16 +295,16 @@
                         </div>
                     </div>
 
-                    <!-- BARANG -->
+                    <!-- BARANG (DARI SPREADSHEET) -->
                     <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-100 space-y-2">
                         <div>
                             <label class="block text-[10px] font-bold text-slate-700 uppercase">Nama Barang (Sesuai KIB / SSH) <span class="text-rose-500">*</span></label>
-                            <input type="text" id="namaBarang" list="namaBarangOptions" oninput="onNamaBarangInput()" placeholder="Pilih atau ketik nama barang..." class="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none" required>
+                            <input type="text" id="namaBarang" list="namaBarangOptions" oninput="onNamaBarangInput()" placeholder="Ketik nama barang dari spreadsheet..." class="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none" required>
                             <datalist id="namaBarangOptions"></datalist>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-700 uppercase">Kode Barang</label>
-                            <input type="text" id="kodeBarang" placeholder="Contoh: 1.3.2.05.003.001" class="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono focus:outline-none">
+                            <label class="block text-[10px] font-bold text-slate-700 uppercase">Kode Barang (Otomatis)</label>
+                            <input type="text" id="kodeBarang" placeholder="Kode barang terisi otomatis..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-mono focus:outline-none">
                         </div>
                     </div>
 
@@ -376,7 +376,7 @@
                         </div>
                     </div>
 
-                    <!-- JUMLAH DIAJUKAN & SATUAN -->
+                    <!-- JUMLAH DIAJUKAN & SATUAN (18 PILIHAN LENGKAP) -->
                     <div class="grid grid-cols-2 gap-2.5">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">
@@ -387,10 +387,24 @@
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Satuan <span class="text-rose-500">*</span></label>
-                            <select id="satuan" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:bg-white focus:outline-none" required>
-                                <option value="Unit">Unit</option>
-                                <option value="Buah">Buah</option>
+                            <!-- DROPDOWN 18 PILIHAN SATUAN LENGKAP -->
+                            <select id="satuan" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500" required>
+                                <option value="Pcs / Unit">Pcs / Unit</option>
+                                <option value="Lusin">Lusin</option>
+                                <option value="Kodi">Kodi</option>
+                                <option value="Gross">Gross</option>
+                                <option value="Rim">Rim</option>
+                                <option value="Pasang">Pasang</option>
                                 <option value="Set">Set</option>
+                                <option value="Kilogram (Kg)">Kilogram (Kg)</option>
+                                <option value="Gram (Gr)">Gram (Gr)</option>
+                                <option value="Ons / Pon">Ons / Pon</option>
+                                <option value="Liter (L) / Mililiter (Ml)">Liter (L) / Mililiter (Ml)</option>
+                                <option value="Meter Persegi (m²)">Meter Persegi (m²)</option>
+                                <option value="Meter Kubik (m³)">Meter Kubik (m³)</option>
+                                <option value="Karton / Dus / Box">Karton / Dus / Box</option>
+                                <option value="Palet">Palet</option>
+                                <option value="Buah">Buah</option>
                                 <option value="Paket">Paket</option>
                                 <option value="Meter">Meter</option>
                             </select>
@@ -461,7 +475,7 @@
                             </tr>
                         </thead>
                         <tbody id="tableBodyRkbmd" class="divide-y divide-slate-100 text-slate-700">
-                            <tr><td colspan="16" class="p-8 text-center text-slate-400 italic">Belum ada data usulan RKBMD.</td></tr>
+                            <tr><td colspan="16" class="p-8 text-center text-slate-400 italic">Belum ada usulan RKBMD Pengadaan.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -495,7 +509,7 @@
                             </tr>
                         </thead>
                         <tbody id="tableBodyRkpbm" class="divide-y divide-slate-100 text-slate-700">
-                            <tr><td colspan="15" class="p-8 text-center text-slate-400 italic">Belum ada data usulan RKPBMD.</td></tr>
+                            <tr><td colspan="15" class="p-8 text-center text-slate-400 italic">Belum ada usulan RKPBMD Pemeliharaan.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -556,7 +570,7 @@
                         <i class="fa-solid fa-clipboard-check text-indigo-600"></i>
                         <span>Rincian Status Penginputan SKPD</span>
                     </h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Pemantauan kepatuhan unit kerja Kabupaten Konawe TA. 2027</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Daftar SKPD diambil langsung dari tab database spreadsheet Anda</p>
                 </div>
                 <button type="button" onclick="closeSkpdDetailsModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold cursor-pointer">&times;</button>
             </div>
@@ -611,71 +625,27 @@
 
     <!-- JAVASCRIPT KONEKSI & LOGIKA APLIKASI -->
     <script>
-        // VARIABLE URL APPS SCRIPT (Bisa diisi langsung di sini atau lewat tombol 'Hubungkan Spreadsheet')
         let GOOGLE_SCRIPT_URL = "";
 
-        let dataset = []; // Berisi seluruh data murni yang ditarik dari Spreadsheet
+        // DATA DARI SPREADSHEET
+        let dataset = [];          // Usulan RKBMD & RKPBMD
+        let masterSkpdList = [];   // Master SKPD dari tab spreadsheet
+        let masterBarangList = []; // Master Barang dari tab spreadsheet
+
         let currentTab = "RKBMD";
         let activeSkpdModalFilter = "SEMUA";
 
-        // MASTER DAFTAR SKPD RESMI KABUPATEN KONAWE
-        const MASTER_SKPD = [
-            "Dinas Pendidikan dan Kebudayaan",
-            "Dinas Kesehatan",
-            "Badan Pengelola Keuangan dan Aset Daerah (BPKAD)",
-            "Badan Perencanaan Pembangunan Daerah (BAPPEDA)",
-            "Badan Pendapatan Daerah (BAPENDA)",
-            "Dinas Pekerjaan Umum dan Penataan Ruang",
-            "Dinas Tanaman Pangan, Hortikultura dan Perkebunan",
-            "Dinas Komunikasi dan Informatika",
-            "Inspektorat Daerah",
-            "Satuan Polisi Pamong Praja",
-            "RSUD Kabupaten Konawe",
-            "Sekretariat Daerah (SETDA)",
-            "Bagian Tata Pemerintahan Setda",
-            "Bagian Hukum Setda",
-            "Bagian Organisasi Setda",
-            "Sekretariat DPRD",
-            "Kecamatan Unaaha",
-            "Kecamatan Wawotobi",
-            "Kecamatan Tongauna",
-            "Kecamatan Sampara",
-            "Kecamatan Lambuya",
-            "Kecamatan Pondidaha",
-            "Kecamatan Abuki",
-            "Kecamatan Uepai"
-        ];
-
-        // MASTER BARANG STANDAR SIMDA / SIPD
-        const MASTER_BARANG = [
-            { kode: "1.3.2.05.003.001", nama: "Laptop / Notebook" },
-            { kode: "1.3.2.05.002.001", nama: "Personal Computer (PC) Desktop" },
-            { kode: "1.3.2.01.001.001", nama: "Kendaraan Dinas Jabatan (Mobil)" },
-            { kode: "1.3.2.01.002.001", nama: "Kendaraan Dinas Operasional (Motor)" },
-            { kode: "1.3.2.05.001.002", nama: "Air Conditioner (AC) Split" },
-            { kode: "1.3.2.03.001.001", nama: "Meja Kerja Kayu Pejabat Eselon" },
-            { kode: "1.3.2.03.001.002", nama: "Kursi Kerja Pejabat Eselon" },
-            { kode: "1.3.2.05.003.005", nama: "Printer Laser / Inkjet All-In-One" }
-        ];
-
         window.addEventListener('DOMContentLoaded', () => {
-            initDatalists();
-            // Ambil URL yang pernah disimpan oleh user
             const savedUrl = localStorage.getItem('rkbmd_script_url');
             if (savedUrl) {
                 GOOGLE_SCRIPT_URL = savedUrl;
                 document.getElementById('btnConfigLabel').innerText = "Ganti URL Spreadsheet";
-            }
-            
-            renderAllViews();
-            if (GOOGLE_SCRIPT_URL) {
                 fetchDataFromSpreadsheet();
             } else {
-                updateConnectionStatus(false, "Klik 'Hubungkan Spreadsheet' untuk memasang URL");
+                updateConnectionStatus(false, "Klik 'Hubungkan Spreadsheet' untuk memulai.");
             }
         });
 
-        // MODAL SETTING URL APPS SCRIPT
         function openUrlConfigModal() {
             document.getElementById('inputConfigUrl').value = GOOGLE_SCRIPT_URL;
             document.getElementById('urlConfigModal').classList.remove('hidden');
@@ -688,7 +658,7 @@
         function saveUrlConfig() {
             const val = (document.getElementById('inputConfigUrl').value || '').trim();
             if (!val.startsWith("https://script.google.com")) {
-                alert("Format URL tidak valid! Harap masukkan URL Web App Google Apps Script yang diawali 'https://script.google.com/macros/s/.../exec'");
+                alert("Format URL tidak valid! Harap masukkan URL Web App yang diawali 'https://script.google.com/macros/s/.../exec'");
                 return;
             }
             GOOGLE_SCRIPT_URL = val;
@@ -726,7 +696,6 @@
             if (l) l.classList.add('hidden');
         }
 
-        // AMBIL SEMUA DATA DARI GOOGLE SPREADSHEET
         async function fetchDataFromSpreadsheet() {
             if (!GOOGLE_SCRIPT_URL) {
                 openUrlConfigModal();
@@ -735,7 +704,7 @@
 
             const icon = document.getElementById('refreshIcon');
             if (icon) icon.classList.add('fa-spin');
-            updateConnectionStatus(false, "Mengunduh database Google Sheets...");
+            updateConnectionStatus(false, "Mengunduh database dari Google Sheets...");
 
             try {
                 const resp = await fetch(GOOGLE_SCRIPT_URL + "?action=read", {
@@ -748,59 +717,83 @@
                 try {
                     resJson = JSON.parse(text);
                 } catch(e) {
-                    throw new Error("Respon bukan JSON. Kemungkinan hak akses 'Who has access' belum dipilih 'Anyone' di Apps Script.");
+                    throw new Error("Respon bukan JSON. Pastikan hak akses 'Who has access' diatur ke 'Anyone' saat deploy Apps Script.");
                 }
 
-                if (resJson.status === "success" && Array.isArray(resJson.data)) {
-                    dataset = resJson.data;
-                    updateConnectionStatus(true, `${dataset.length} data usulan aktif di Spreadsheet`);
-                    showToast("Database Google Spreadsheet berhasil dimuat!");
+                if (resJson.status === "success") {
+                    dataset = Array.isArray(resJson.data) ? resJson.data : [];
+                    masterSkpdList = Array.isArray(resJson.refSkpd) ? resJson.refSkpd : [];
+                    masterBarangList = Array.isArray(resJson.refBarang) ? resJson.refBarang : [];
+
+                    populateMasterDatalists();
+
+                    document.getElementById('statMasterInfo').innerText = `${masterSkpdList.length} SKPD / ${masterBarangList.length} Barang`;
+                    updateConnectionStatus(true, `${dataset.length} Usulan Aktif | ${masterSkpdList.length} SKPD Terdaftar`);
+                    showToast("Database usulan & master data berhasil disinkronkan!");
                 } else {
                     throw new Error(resJson.message || "Gagal mengambil data");
                 }
             } catch (err) {
                 console.error("Gagal membaca Google Sheets:", err);
                 updateConnectionStatus(false, "Gagal koneksi! Periksa URL dan Hak Akses Apps Script.");
-                alert("Koneksi Spreadsheet Gagal:\n" + err.message + "\n\nPastikan saat Deploy Web App Anda memilih 'Who has access: Anyone'.");
+                alert("Koneksi Spreadsheet Gagal:\n" + err.message);
             } finally {
                 if (icon) icon.classList.remove('fa-spin');
                 renderAllViews();
             }
         }
 
-        function renderAllViews() {
-            renderTables();
-            updateStats();
-            updateSkpdComplianceAnalytics();
+        function populateMasterDatalists() {
+            const dlSkpd = document.getElementById('skpdOptions');
+            const dlFilter = document.getElementById('downloadSkpdFilter');
+
+            if (dlSkpd) {
+                dlSkpd.innerHTML = masterSkpdList.map(s => `<option value="${s.nama}">`).join('');
+            }
+            if (dlFilter) {
+                let html = `<option value="SEMUA">-- Semua SKPD (${masterSkpdList.length}) --</option>`;
+                masterSkpdList.forEach(s => html += `<option value="${s.nama}">${s.nama}</option>`);
+                dlFilter.innerHTML = html;
+            }
+
+            const dlBrg = document.getElementById('namaBarangOptions');
+            if (dlBrg) {
+                dlBrg.innerHTML = masterBarangList.map(b => `<option value="${b.nama}">[${b.kode}]</option>`).join('');
+            }
         }
 
-        function categorizeSkpd(name) {
+        // AUTO-FILL KODE BARANG & MENCARI SATUAN COCOK SAAT NAMA BARANG DIKETIK
+        function onNamaBarangInput() {
+            const val = (document.getElementById('namaBarang')?.value || '').toLowerCase().trim();
+            const found = masterBarangList.find(b => b.nama.toLowerCase() === val);
+            if (found) {
+                document.getElementById('kodeBarang').value = found.kode || "";
+                if (found.satuan) {
+                    const sel = document.getElementById('satuan');
+                    if (sel) {
+                        for (let opt of sel.options) {
+                            if (opt.value.toLowerCase() === found.satuan.toLowerCase() || opt.value.toLowerCase().includes(found.satuan.toLowerCase())) {
+                                sel.value = opt.value;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function categorizeSkpd(name, customCategory = "") {
+            if (customCategory) return customCategory;
             const upper = String(name || '').toUpperCase().trim();
             if (upper.includes('KECAMATAN') || upper.startsWith('KEC.')) return 'Kecamatan';
             if (upper.includes('BAGIAN') || upper.includes('SETDA') || upper.includes('SEKRETARIAT DAERAH') || upper.includes('SEKRETARIAT DPRD')) return 'Bagian';
             return 'Badan & Dinas';
         }
 
-        function initDatalists() {
-            const dlSkpd = document.getElementById('skpdOptions');
-            const dlFilter = document.getElementById('downloadSkpdFilter');
-            if (dlSkpd) dlSkpd.innerHTML = MASTER_SKPD.map(s => `<option value="${s}">`).join('');
-            if (dlFilter) {
-                let html = `<option value="SEMUA">-- Semua SKPD (${MASTER_SKPD.length}) --</option>`;
-                MASTER_SKPD.forEach(s => html += `<option value="${s}">${s}</option>`);
-                dlFilter.innerHTML = html;
-            }
-
-            const dlBrg = document.getElementById('namaBarangOptions');
-            if (dlBrg) dlBrg.innerHTML = MASTER_BARANG.map(b => `<option value="${b.nama}">[${b.kode}]</option>`).join('');
-        }
-
-        function onNamaBarangInput() {
-            const val = (document.getElementById('namaBarang')?.value || '').toLowerCase().trim();
-            const found = MASTER_BARANG.find(b => b.nama.toLowerCase() === val);
-            if (found) {
-                document.getElementById('kodeBarang').value = found.kode;
-            }
+        function renderAllViews() {
+            renderTables();
+            updateStats();
+            updateSkpdComplianceAnalytics();
         }
 
         function toggleFormFieldsByJenis() {
@@ -825,7 +818,6 @@
             }
         }
 
-        // RUMUS PERMENDAGRI 19/2016: Riil = Maksimum - (Baik + Rusak Ringan) - Optimalisasi
         function calcKebutuhanRiil() {
             const b = parseInt(document.getElementById('kondisiBaik')?.value) || 0;
             const rr = parseInt(document.getElementById('kondisiRusakRingan')?.value) || 0;
@@ -882,7 +874,6 @@
             return true;
         }
 
-        // SIMPAN / EDIT LANGSUNG KE GOOGLE SHEETS
         async function handleFormSubmit(e) {
             e.preventDefault();
 
@@ -923,12 +914,12 @@
                 rencanaDisetujui: "",
 
                 jumlahUsulan: parseInt(document.getElementById('jumlahUsulan')?.value) || 1,
-                satuan: document.getElementById('satuan')?.value || "Unit",
+                satuan: document.getElementById('satuan')?.value || "Pcs / Unit",
                 keterangan: document.getElementById('keterangan')?.value || "-",
                 tanggal: new Date().toLocaleDateString('id-ID')
             };
 
-            showLoader(isEdit ? "Menyimpan perubahan di Spreadsheet..." : "Menambahkan baris baru di Spreadsheet...");
+            showLoader(isEdit ? "Menyimpan perubahan di Spreadsheet..." : "Menambahkan usulan di Spreadsheet...");
 
             try {
                 const resp = await fetch(GOOGLE_SCRIPT_URL, {
@@ -984,7 +975,23 @@
             }
 
             document.getElementById('jumlahUsulan').value = item.jumlahUsulan || 1;
-            document.getElementById('satuan').value = item.satuan || "Unit";
+            
+            // Set Nilai Satuan di Dropdown
+            const selSatuan = document.getElementById('satuan');
+            if (selSatuan) {
+                let foundMatch = false;
+                for (let opt of selSatuan.options) {
+                    if (opt.value.toLowerCase() === (item.satuan || '').toLowerCase()) {
+                        selSatuan.value = opt.value;
+                        foundMatch = true;
+                        break;
+                    }
+                }
+                if (!foundMatch && item.satuan) {
+                    selSatuan.value = item.satuan;
+                }
+            }
+
             document.getElementById('keterangan').value = item.keterangan || "";
 
             document.getElementById('formTitle').innerText = "Edit Data Usulan";
@@ -1035,12 +1042,10 @@
             document.getElementById('btnSubmitText').innerText = "Simpan ke Google Sheets";
             document.getElementById('formTitle').innerText = "Formulir Usulan BMD";
             document.getElementById('formSubtitle').innerText = "Input langsung tersimpan di Google Spreadsheet";
+            document.getElementById('satuan').value = "Pcs / Unit";
             toggleFormFieldsByJenis();
         }
 
-        // =========================================================================
-        // RENDERING TABEL & MONITORING
-        // =========================================================================
         function switchTableTab(tab) {
             currentTab = tab;
             const btnRkbmd = document.getElementById('tabRkbmdBtn');
@@ -1056,8 +1061,8 @@
             } else {
                 btnRkpbm.className = "flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg bg-amber-600 text-white cursor-pointer transition";
                 btnRkpbm.className = "flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer transition";
-                boxRkpbm.classList.remove('hidden');
-                boxRkbmd.classList.add('hidden');
+                boxRkbmd.classList.remove('hidden');
+                boxRkpbm.classList.add('hidden');
             }
             renderTables();
         }
@@ -1095,7 +1100,7 @@
                             <td class="p-2 text-center text-indigo-700 font-bold">${item.kebutuhanMaksimum || 0}</td>
                             <td class="p-2 text-center font-black bg-amber-50 text-amber-900">${item.kebutuhanRiil || 0}</td>
                             <td class="p-2 text-center font-black bg-emerald-50 text-emerald-700">${item.jumlahUsulan}</td>
-                            <td class="p-2 text-center">${item.satuan}</td>
+                            <td class="p-2 text-center font-semibold text-slate-700">${item.satuan}</td>
                             <td class="p-2 text-slate-500">${item.keterangan || '-'}</td>
                             <td class="p-2 text-center space-x-1">
                                 <button type="button" onclick="editItem('${item.id}')" class="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg cursor-pointer">
@@ -1125,12 +1130,12 @@
                             <td class="p-2 font-mono text-[10px] text-slate-500">${item.kodeBarang || '-'}</td>
                             <td class="p-2 font-bold text-amber-950">${item.namaBarang}</td>
                             <td class="p-2 text-center font-bold">${item.jumlahUsulan}</td>
-                            <td class="p-2 text-center">${item.satuan}</td>
+                            <td class="p-2 text-center font-semibold text-slate-700">${item.satuan}</td>
                             <td class="p-2 text-slate-600">${item.statusBarang || 'Dipergunakan Sendiri'}</td>
                             <td class="p-2 text-center font-bold ${item.kondisiBarang === 'Baik' ? 'text-emerald-600' : 'text-amber-600'}">${item.kondisiBarang || 'Baik'}</td>
                             <td class="p-2 font-bold text-amber-800">${item.namaPemeliharaan || '-'}</td>
                             <td class="p-2 text-center font-black bg-emerald-50 text-emerald-800">${item.jumlahUsulan}</td>
-                            <td class="p-2 text-center">${item.satuan}</td>
+                            <td class="p-2 text-center font-semibold text-slate-700">${item.satuan}</td>
                             <td class="p-2 text-center font-mono text-slate-400 italic">[Asistensi BPKAD]</td>
                             <td class="p-2 text-slate-500">${item.keterangan || '-'}</td>
                             <td class="p-2 text-center space-x-1">
@@ -1152,16 +1157,13 @@
         function updateStats() {
             const rkbmd = dataset.filter(i => i.jenis === "RKBMD");
             const rkpbm = dataset.filter(i => i.jenis === "RKPBMD");
-            const totalQty = dataset.reduce((acc, curr) => acc + (Number(curr.jumlahUsulan) || 0), 0);
 
             document.getElementById('statTotalItems').innerText = dataset.length;
             document.getElementById('statRkbmdCount').innerText = rkbmd.length;
             document.getElementById('statRkpbmCount').innerText = rkpbm.length;
-            document.getElementById('statTotalQty').innerText = `${totalQty} Unit`;
         }
 
         function getSkpdComplianceData() {
-            let allSkpds = [...new Set(MASTER_SKPD)];
             const skpdUsageMap = {};
 
             dataset.forEach(item => {
@@ -1174,15 +1176,16 @@
                 skpdUsageMap[sName].totalQty += (Number(item.jumlahUsulan) || 0);
             });
 
-            const detailedList = allSkpds.map(skpdName => {
-                const category = categorizeSkpd(skpdName);
-                const isSubmitted = Boolean(skpdUsageMap[skpdName] && skpdUsageMap[skpdName].count > 0);
+            const detailedList = masterSkpdList.map(skpdItem => {
+                const sName = skpdItem.nama;
+                const category = categorizeSkpd(sName, skpdItem.kategori);
+                const isSubmitted = Boolean(skpdUsageMap[sName] && skpdUsageMap[sName].count > 0);
                 return {
-                    name: skpdName,
+                    name: sName,
                     category: category,
                     hasSubmitted: isSubmitted,
-                    count: isSubmitted ? skpdUsageMap[skpdName].count : 0,
-                    totalQty: isSubmitted ? skpdUsageMap[skpdName].totalQty : 0
+                    count: isSubmitted ? skpdUsageMap[sName].count : 0,
+                    totalQty: isSubmitted ? skpdUsageMap[sName].totalQty : 0
                 };
             });
 
@@ -1302,9 +1305,6 @@
             }, 3000);
         }
 
-        // =========================================================================
-        // MODAL SKPD
-        // =========================================================================
         function openSkpdDetailsModal(filterKey = "SEMUA") {
             activeSkpdModalFilter = filterKey;
             updateModalFilterTabsUI(filterKey);
@@ -1398,9 +1398,6 @@
             showToast("Rekap kepatuhan berhasil diunduh!");
         }
 
-        // =========================================================================
-        // EKSPOR EXCEL FORMAT RESMI PERMENDAGRI NO. 19/2016
-        // =========================================================================
         function exportOfficialPermendagriExcel() {
             const jenis = document.getElementById('downloadJenisFilter')?.value || "RKBMD";
             const skpd = document.getElementById('downloadSkpdFilter')?.value || "SEMUA";
