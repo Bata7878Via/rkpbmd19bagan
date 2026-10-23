@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,11 +6,11 @@
     <title>Sistem Terpadu RKBMD & RKPBMD Kab. Konawe TA. 2027</title>
     
     <meta name="theme-color" content="#1e3a8a">
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome 6 -->
+    <!-- FontAwesome 6 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SheetJS Excel Export -->
+    <!-- SheetJS Excel Engine CDN -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     
     <style>
@@ -34,13 +33,13 @@
 
     <!-- OVERLAY LOADING DATABASE ONLINE -->
     <div id="globalLoader" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex flex-col items-center justify-center text-white hidden">
-        <div class="bg-slate-800/90 p-5 rounded-2xl shadow-2xl flex flex-col items-center gap-3 border border-slate-700">
+        <div class="bg-slate-800 p-5 sm:p-6 rounded-2xl shadow-2xl flex flex-col items-center gap-3 border border-slate-700 max-w-xs text-center">
             <i class="fa-solid fa-cloud-arrow-up text-3xl sm:text-4xl text-blue-400 animate-bounce"></i>
             <span id="globalLoaderMsg" class="text-xs sm:text-sm font-bold tracking-wide">Sinkronisasi Database Google Spreadsheet...</span>
         </div>
     </div>
 
-    <!-- NOTIFIKASI TOAST -->
+    <!-- NOTIFIKASI FLOATING (TOAST) -->
     <div id="toastNotification" class="fixed top-4 left-3 right-3 sm:left-auto sm:right-6 sm:w-auto z-50 flex items-center gap-3 bg-emerald-600 text-white px-5 py-3.5 rounded-2xl shadow-2xl transition-all duration-300 transform -translate-y-28 opacity-0 pointer-events-none">
         <div id="toastIconBox" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
             <i id="toastIcon" class="fa-solid fa-check text-base"></i>
@@ -59,25 +58,28 @@
             <div>
                 <div class="flex items-center gap-2 mb-1.5 flex-wrap">
                     <span class="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black bg-amber-400 text-slate-950 uppercase tracking-wide">Permendagri No. 19/2016</span>
-                    <span class="text-xs text-blue-200 font-semibold">Tahun Anggaran 2027</span>
+                    <span class="text-xs text-blue-200 font-semibold">TA. 2027</span>
                 </div>
                 <h1 class="text-lg sm:text-2xl md:text-3xl font-black tracking-tight leading-snug">Sistem Terpadu RKBMD & RKPBMD</h1>
-                <p class="text-blue-100 text-xs sm:text-sm mt-0.5">Pemerintah Kabupaten Konawe &bull; Terhubung Langsung ke Google Spreadsheet</p>
+                <p class="text-blue-100 text-xs sm:text-sm mt-0.5">Pemerintah Kabupaten Konawe &bull; Modul Pengadaan (12 Kolom) & Pemeliharaan (13 Kolom)</p>
             </div>
             
-            <div class="flex items-center gap-2 w-full md:w-auto">
-                <button type="button" onclick="fetchDataFromSpreadsheet()" class="w-full md:w-auto justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer active:scale-95">
-                    <i id="refreshIcon" class="fa-solid fa-rotate text-blue-200"></i> Muat Ulang Data Cloud
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                <button type="button" onclick="openUrlConfigModal()" class="flex-1 md:flex-none justify-center bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer shadow active:scale-95">
+                    <i class="fa-solid fa-link"></i> <span id="btnConfigLabel">Hubungkan Spreadsheet</span>
+                </button>
+                <button type="button" onclick="fetchDataFromSpreadsheet()" class="flex-1 md:flex-none justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer active:scale-95">
+                    <i id="refreshIcon" class="fa-solid fa-rotate text-blue-200"></i> Segarkan
                 </button>
             </div>
         </header>
 
-        <!-- KARTU STATISTIK RINGKASAN DATABASE -->
+        <!-- KARTU STATISTIK DATABASE SPREADSHEET -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 shadow-sm">
                 <span class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Total Usulan Masuk</span>
                 <div class="text-xl sm:text-2xl font-black text-slate-800 mt-1" id="statTotalItems">0</div>
-                <div class="text-[10px] text-slate-400 font-medium mt-0.5">Semua Dokumen Online</div>
+                <div class="text-[10px] text-slate-400 font-medium mt-0.5">Baris di Spreadsheet</div>
             </div>
             <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 shadow-sm">
                 <span class="text-[10px] sm:text-xs font-bold text-indigo-600 uppercase">RKBMD Pengadaan</span>
@@ -99,10 +101,10 @@
         <!-- PANEL STATUS & FILTER EKSPOR EXCEL PERMENDAGRI -->
         <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 text-xs">
             <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-                <span id="cloudStatusBadge" class="inline-flex items-center px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
-                    <i class="fa-solid fa-database mr-1.5"></i> Database:
+                <span id="cloudStatusBadge" class="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 font-bold border border-amber-200">
+                    <i class="fa-solid fa-database mr-1.5"></i> Status Database:
                 </span>
-                <span id="cloudStatus" class="text-slate-600 font-semibold">Mengambil data dari Google Sheets...</span>
+                <span id="cloudStatus" class="text-slate-600 font-semibold">Belum Terhubung ke Apps Script</span>
             </div>
 
             <!-- Download Format Resmi Excel -->
@@ -122,7 +124,7 @@
             </div>
         </div>
 
-        <!-- PANEL MONITORING KEPATUHAN & DIAGRAM DONUT SVG -->
+        <!-- PANEL MONITORING KEPATUHAN & DIAGRAM BULAT SVG -->
         <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-3">
                 <div>
@@ -132,7 +134,7 @@
                         </span>
                         <h2 class="font-bold text-slate-800 text-sm sm:text-base">Monitoring Kepatuhan Penginputan SKPD</h2>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Data di bawah dihitung langsung dari data riil Google Spreadsheet.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Dihitung otomatis secara langsung dari data Google Spreadsheet.</p>
                 </div>
                 <button type="button" onclick="openSkpdDetailsModal('SEMUA')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer active:scale-95 w-full sm:w-auto justify-center">
                     <i class="fa-solid fa-list-check"></i> Rincian Status SKPD
@@ -190,7 +192,7 @@
                 </div>
             </div>
 
-            <!-- 2 Diagram Bulat SVG Murni -->
+            <!-- Dua Diagram Bulat SVG Murni -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col items-center">
                     <h3 class="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide text-center">Status Penginputan Seluruh SKPD</h3>
@@ -245,7 +247,7 @@
         <!-- FORM & TABEL CONTAINER -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
             
-            <!-- FORMULIR INPUT ONLINE -->
+            <!-- FORMULIR INPUT -->
             <div class="lg:col-span-4 bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
                     <div class="flex items-center gap-2">
@@ -262,7 +264,7 @@
                 <form id="permenForm" class="space-y-3" onsubmit="handleFormSubmit(event)">
                     <input type="hidden" id="editId" value="">
 
-                    <!-- JENIS DOKUMEN -->
+                    <!-- JENIS USULAN -->
                     <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
                         <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Jenis Dokumen Usulan <span class="text-rose-500">*</span></label>
                         <select id="formJenisDokumen" onchange="toggleFormFieldsByJenis()" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700 focus:outline-none">
@@ -293,7 +295,7 @@
                         </div>
                     </div>
 
-                    <!-- NAMA & KODE BARANG -->
+                    <!-- BARANG -->
                     <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-100 space-y-2">
                         <div>
                             <label class="block text-[10px] font-bold text-slate-700 uppercase">Nama Barang (Sesuai KIB / SSH) <span class="text-rose-500">*</span></label>
@@ -459,7 +461,7 @@
                             </tr>
                         </thead>
                         <tbody id="tableBodyRkbmd" class="divide-y divide-slate-100 text-slate-700">
-                            <tr><td colspan="16" class="p-8 text-center text-slate-400 italic">Memuat usulan langsung dari Google Spreadsheet...</td></tr>
+                            <tr><td colspan="16" class="p-8 text-center text-slate-400 italic">Belum ada data usulan RKBMD.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -469,9 +471,9 @@
                     <table class="w-full text-left text-xs border-collapse whitespace-nowrap">
                         <thead class="bg-amber-900 text-white sticky top-0 uppercase font-semibold text-[10px] text-center tracking-wider z-10">
                             <tr>
-                                <th colspan="3" class="p-1.5 border border-amber-800 bg-amber-950">Kluster I: Dasar Kegiatan</th>
-                                <th colspan="6" class="p-1.5 border border-amber-800 bg-amber-900">Kluster II: KIB</th>
-                                <th colspan="3" class="p-1.5 border border-amber-800 bg-amber-800">Kluster III: Aksi</th>
+                                <th colspan="3" class="p-1.5 border border-amber-800 bg-amber-950">Kluster I</th>
+                                <th colspan="6" class="p-1.5 border border-amber-800 bg-amber-900">Kluster II (KIB)</th>
+                                <th colspan="3" class="p-1.5 border border-amber-800 bg-amber-800">Kluster III</th>
                                 <th colspan="2" class="p-1.5 border border-amber-800 bg-slate-900 text-amber-300">Kluster IV</th>
                                 <th rowspan="2" class="p-2 border border-amber-800">Aksi</th>
                             </tr>
@@ -488,26 +490,61 @@
                                 <th class="p-2 border border-amber-800">Nama Pemeliharaan</th>
                                 <th class="p-2 border border-amber-800 bg-emerald-700 font-bold">Target</th>
                                 <th class="p-2 border border-amber-800">Satuan</th>
-                                <th class="p-2 border border-amber-800 bg-slate-800 text-amber-300">Disetujui BPKAD</th>
+                                <th class="p-2 border border-amber-800 bg-slate-800 text-amber-300">Disetujui</th>
                                 <th class="p-2 border border-amber-800">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody id="tableBodyRkpbm" class="divide-y divide-slate-100 text-slate-700">
-                            <tr><td colspan="15" class="p-8 text-center text-slate-400 italic">Memuat usulan langsung dari Google Spreadsheet...</td></tr>
+                            <tr><td colspan="15" class="p-8 text-center text-slate-400 italic">Belum ada data usulan RKPBMD.</td></tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="flex justify-between items-center text-xs text-slate-500 pt-2 border-t border-slate-100">
-                    <span id="labelTotalRecords">0 usulan tersinkronisasi</span>
+                    <span id="labelTotalRecords">0 usulan ditampilkan</span>
                     <span class="text-indigo-700 font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-cloud-check text-emerald-500"></i> Cloud Database Aktif
+                        <i class="fa-solid fa-shield-check text-emerald-500"></i> Standar Permendagri 19/2016
                     </span>
                 </div>
             </div>
 
         </div>
 
+    </div>
+
+    <!-- MODAL SETTING / HUBUNGKAN GOOGLE APPS SCRIPT URL -->
+    <div id="urlConfigModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="p-2 bg-amber-50 text-amber-600 rounded-xl">
+                        <i class="fa-solid fa-link text-base"></i>
+                    </span>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">Koneksi Database Spreadsheet</h3>
+                        <p class="text-xs text-slate-500">Hubungkan sistem ke Web App Google Apps Script</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeUrlConfigModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold cursor-pointer leading-none">&times;</button>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-700">URL Web App Google Apps Script (/exec):</label>
+                <textarea id="inputConfigUrl" rows="3" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs font-mono focus:bg-white focus:outline-none"></textarea>
+                <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-[11px] text-amber-900 space-y-1">
+                    <div class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Penting saat Deploy Apps Script:</div>
+                    <ul class="list-disc pl-4 space-y-0.5">
+                        <li><strong>Execute as:</strong> Me (email Anda)</li>
+                        <li><strong>Who has access:</strong> <u>Anyone (Siapa saja)</u></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button type="button" onclick="closeUrlConfigModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer">Batal</button>
+                <button type="button" onclick="saveUrlConfig()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl cursor-pointer shadow active:scale-95">Simpan & Sambungkan</button>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL RINCIAN KEPATUHAN SKPD -->
@@ -572,18 +609,16 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT KONEKSI ONLINE & LOGIKA APLIKASI -->
+    <!-- JAVASCRIPT KONEKSI & LOGIKA APLIKASI -->
     <script>
-        // =========================================================================
-        // TEMPELKAN URL HASIL DEPLOY APPS SCRIPT ANDA DI BAWAH INI:
-        // =========================================================================
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwG1URNYVmPsdpM8Tsfg-ZoOWXGPodtG1wki9uVdK2hAlZ2VsT73DeT9lLu1muqAQht/exec";
+        // VARIABLE URL APPS SCRIPT (Bisa diisi langsung di sini atau lewat tombol 'Hubungkan Spreadsheet')
+        let GOOGLE_SCRIPT_URL = "";
 
-        let dataset = []; // Data riil yang ditarik langsung dari spreadsheet
+        let dataset = []; // Berisi seluruh data murni yang ditarik dari Spreadsheet
         let currentTab = "RKBMD";
         let activeSkpdModalFilter = "SEMUA";
 
-        // MASTER SKPD KABUPATEN KONAWE
+        // MASTER DAFTAR SKPD RESMI KABUPATEN KONAWE
         const MASTER_SKPD = [
             "Dinas Pendidikan dan Kebudayaan",
             "Dinas Kesehatan",
@@ -611,7 +646,7 @@
             "Kecamatan Uepai"
         ];
 
-        // MASTER CONTOH BARANG SIMDA / SIPD
+        // MASTER BARANG STANDAR SIMDA / SIPD
         const MASTER_BARANG = [
             { kode: "1.3.2.05.003.001", nama: "Laptop / Notebook" },
             { kode: "1.3.2.05.002.001", nama: "Personal Computer (PC) Desktop" },
@@ -625,8 +660,59 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initDatalists();
-            fetchDataFromSpreadsheet();
+            // Ambil URL yang pernah disimpan oleh user
+            const savedUrl = localStorage.getItem('rkbmd_script_url');
+            if (savedUrl) {
+                GOOGLE_SCRIPT_URL = savedUrl;
+                document.getElementById('btnConfigLabel').innerText = "Ganti URL Spreadsheet";
+            }
+            
+            renderAllViews();
+            if (GOOGLE_SCRIPT_URL) {
+                fetchDataFromSpreadsheet();
+            } else {
+                updateConnectionStatus(false, "Klik 'Hubungkan Spreadsheet' untuk memasang URL");
+            }
         });
+
+        // MODAL SETTING URL APPS SCRIPT
+        function openUrlConfigModal() {
+            document.getElementById('inputConfigUrl').value = GOOGLE_SCRIPT_URL;
+            document.getElementById('urlConfigModal').classList.remove('hidden');
+        }
+
+        function closeUrlConfigModal() {
+            document.getElementById('urlConfigModal').classList.add('hidden');
+        }
+
+        function saveUrlConfig() {
+            const val = (document.getElementById('inputConfigUrl').value || '').trim();
+            if (!val.startsWith("https://script.google.com")) {
+                alert("Format URL tidak valid! Harap masukkan URL Web App Google Apps Script yang diawali 'https://script.google.com/macros/s/.../exec'");
+                return;
+            }
+            GOOGLE_SCRIPT_URL = val;
+            localStorage.setItem('rkbmd_script_url', val);
+            document.getElementById('btnConfigLabel').innerText = "Ganti URL Spreadsheet";
+            closeUrlConfigModal();
+            fetchDataFromSpreadsheet();
+        }
+
+        function updateConnectionStatus(isConnected, message) {
+            const badge = document.getElementById('cloudStatusBadge');
+            const label = document.getElementById('cloudStatus');
+            if (!badge || !label) return;
+
+            if (isConnected) {
+                badge.className = "inline-flex items-center px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-200";
+                badge.innerHTML = `<i class="fa-solid fa-cloud-check mr-1.5"></i> Terhubung Online:`;
+                label.innerText = message || `${dataset.length} baris di Google Sheets`;
+            } else {
+                badge.className = "inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 font-bold border border-amber-200";
+                badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Belum Terhubung:`;
+                label.innerText = message || "Perlu Konfigurasi URL";
+            }
+        }
 
         function showLoader(text) {
             const l = document.getElementById('globalLoader');
@@ -640,36 +726,42 @@
             if (l) l.classList.add('hidden');
         }
 
-        // AMBIL SEMUA DATA LANGSUNG DARI GOOGLE SPREADSHEET
+        // AMBIL SEMUA DATA DARI GOOGLE SPREADSHEET
         async function fetchDataFromSpreadsheet() {
-            const icon = document.getElementById('refreshIcon');
-            const statusLabel = document.getElementById('cloudStatus');
-            const statusBadge = document.getElementById('cloudStatusBadge');
-
-            if (icon) icon.classList.add('fa-spin');
-            statusLabel.innerText = "Mengunduh data Google Sheets...";
-
-            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("PASTIKAN_GANTI")) {
-                statusLabel.innerText = "URL Apps Script belum dipasang!";
-                statusBadge.className = "inline-flex items-center px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 font-bold border border-rose-200";
-                if (icon) icon.classList.remove('fa-spin');
+            if (!GOOGLE_SCRIPT_URL) {
+                openUrlConfigModal();
                 return;
             }
 
+            const icon = document.getElementById('refreshIcon');
+            if (icon) icon.classList.add('fa-spin');
+            updateConnectionStatus(false, "Mengunduh database Google Sheets...");
+
             try {
-                const resp = await fetch(GOOGLE_SCRIPT_URL + "?action=read");
-                const resJson = await resp.json();
+                const resp = await fetch(GOOGLE_SCRIPT_URL + "?action=read", {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+                
+                const text = await resp.text();
+                let resJson;
+                try {
+                    resJson = JSON.parse(text);
+                } catch(e) {
+                    throw new Error("Respon bukan JSON. Kemungkinan hak akses 'Who has access' belum dipilih 'Anyone' di Apps Script.");
+                }
+
                 if (resJson.status === "success" && Array.isArray(resJson.data)) {
                     dataset = resJson.data;
-                    statusLabel.innerText = `Terhubung Online (${dataset.length} baris)`;
-                    statusBadge.className = "inline-flex items-center px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-200";
+                    updateConnectionStatus(true, `${dataset.length} data usulan aktif di Spreadsheet`);
                     showToast("Database Google Spreadsheet berhasil dimuat!");
+                } else {
+                    throw new Error(resJson.message || "Gagal mengambil data");
                 }
             } catch (err) {
                 console.error("Gagal membaca Google Sheets:", err);
-                statusLabel.innerText = "Gagal terhubung ke Cloud Database";
-                statusBadge.className = "inline-flex items-center px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 font-bold border border-rose-200";
-                alert("Gagal terhubung ke Google Spreadsheet! Pastikan URL Apps Script benar dan izin akses diatur ke 'Anyone'.");
+                updateConnectionStatus(false, "Gagal koneksi! Periksa URL dan Hak Akses Apps Script.");
+                alert("Koneksi Spreadsheet Gagal:\n" + err.message + "\n\nPastikan saat Deploy Web App Anda memilih 'Who has access: Anyone'.");
             } finally {
                 if (icon) icon.classList.remove('fa-spin');
                 renderAllViews();
@@ -733,6 +825,7 @@
             }
         }
 
+        // RUMUS PERMENDAGRI 19/2016: Riil = Maksimum - (Baik + Rusak Ringan) - Optimalisasi
         function calcKebutuhanRiil() {
             const b = parseInt(document.getElementById('kondisiBaik')?.value) || 0;
             const rr = parseInt(document.getElementById('kondisiRusakRingan')?.value) || 0;
@@ -789,11 +882,15 @@
             return true;
         }
 
-        // =========================================================================
-        // FORM SUBMIT (CREATE / UPDATE LANGSUNG KE GOOGLE SHEETS)
-        // =========================================================================
+        // SIMPAN / EDIT LANGSUNG KE GOOGLE SHEETS
         async function handleFormSubmit(e) {
             e.preventDefault();
+
+            if (!GOOGLE_SCRIPT_URL) {
+                alert("Silakan hubungkan Web App Google Spreadsheet terlebih dahulu melalui tombol di bagian atas!");
+                openUrlConfigModal();
+                return;
+            }
 
             const jenis = document.getElementById('formJenisDokumen')?.value;
             if (jenis === "RKBMD" && !validateJumlahUsulan()) return;
@@ -831,33 +928,34 @@
                 tanggal: new Date().toLocaleDateString('id-ID')
             };
 
-            showLoader(isEdit ? "Memperbarui baris di Google Sheets..." : "Menyimpan ke Google Sheets...");
+            showLoader(isEdit ? "Menyimpan perubahan di Spreadsheet..." : "Menambahkan baris baru di Spreadsheet...");
 
             try {
                 const resp = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload),
+                    redirect: 'follow'
                 });
-                const res = await resp.json();
                 
+                const text = await resp.text();
+                let res = JSON.parse(text);
+
                 if (res.status === "success") {
-                    showToast(isEdit ? "Perubahan berhasil dicatat ke Google Sheets!" : "Usulan baru tersimpan di Google Sheets!");
+                    showToast(isEdit ? "Data berhasil diperbarui di Google Sheets!" : "Usulan baru tersimpan di Google Sheets!");
                     resetForm();
-                    // Segera tarik ulang database terbaru dari spreadsheet
                     await fetchDataFromSpreadsheet();
                 } else {
-                    alert("Google Sheets merespon: " + res.message);
+                    alert("Respon Spreadsheet: " + res.message);
                 }
             } catch (err) {
-                console.error("Gagal menyimpan ke Google Sheets:", err);
-                alert("Gagal menghubungi Google Sheets. Periksa koneksi internet Anda.");
+                console.error("Gagal menyimpan:", err);
+                alert("Gagal menyimpan ke Google Spreadsheet. Periksa koneksi internet Anda.");
             } finally {
                 hideLoader();
             }
         }
 
-        // MODE EDIT
         function editItem(id) {
             const item = dataset.find(d => String(d.id) === String(id));
             if (!item) return;
@@ -890,14 +988,13 @@
             document.getElementById('keterangan').value = item.keterangan || "";
 
             document.getElementById('formTitle').innerText = "Edit Data Usulan";
-            document.getElementById('formSubtitle').innerText = "Item: " + item.namaBarang;
+            document.getElementById('formSubtitle').innerText = "Mengubah item: " + item.namaBarang;
             document.getElementById('btnSubmitText').innerText = "Perbarui di Google Sheets";
             document.getElementById('btnCancel').classList.remove('hidden');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // HAPUS LANGSUNG DARI GOOGLE SPREADSHEET
         async function deleteItem(id) {
             const item = dataset.find(d => String(d.id) === String(id));
             if (!item) return;
@@ -910,19 +1007,22 @@
                 const resp = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: "delete", id: item.id })
+                    body: JSON.stringify({ action: "delete", id: item.id }),
+                    redirect: 'follow'
                 });
-                const res = await resp.json();
+                
+                const text = await resp.text();
+                let res = JSON.parse(text);
 
                 if (res.status === "success") {
-                    showToast(`Usulan "${item.namaBarang}" telah dihapus dari Google Sheets!`, true);
+                    showToast(`Usulan "${item.namaBarang}" telah dihapus!`, true);
                     await fetchDataFromSpreadsheet();
                 } else {
-                    alert("Google Sheets: " + res.message);
+                    alert("Gagal: " + res.message);
                 }
             } catch (err) {
                 console.error("Gagal menghapus:", err);
-                alert("Gagal menghapus data dari Google Sheets. Periksa internet Anda.");
+                alert("Gagal menghapus dari Google Sheets. Periksa internet Anda.");
             } finally {
                 hideLoader();
             }
@@ -939,7 +1039,7 @@
         }
 
         // =========================================================================
-        // RENDERING TABEL & MONITORING DARI DATASET CLOUD
+        // RENDERING TABEL & MONITORING
         // =========================================================================
         function switchTableTab(tab) {
             currentTab = tab;
@@ -955,7 +1055,7 @@
                 boxRkpbm.classList.add('hidden');
             } else {
                 btnRkpbm.className = "flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg bg-amber-600 text-white cursor-pointer transition";
-                btnRkbmd.className = "flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer transition";
+                btnRkpbm.className = "flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer transition";
                 boxRkpbm.classList.remove('hidden');
                 boxRkbmd.classList.add('hidden');
             }
@@ -978,7 +1078,7 @@
             const dataRkbmd = filtered.filter(i => i.jenis === "RKBMD");
             if (tbodyRkbmd) {
                 if (dataRkbmd.length === 0) {
-                    tbodyRkbmd.innerHTML = `<tr><td colspan="16" class="p-8 text-center text-slate-400 italic">Belum ada usulan RKBMD Pengadaan di Google Spreadsheet.</td></tr>`;
+                    tbodyRkbmd.innerHTML = `<tr><td colspan="16" class="p-8 text-center text-slate-400 italic">Belum ada usulan RKBMD Pengadaan.</td></tr>`;
                 } else {
                     tbodyRkbmd.innerHTML = dataRkbmd.map((item, idx) => `
                         <tr class="hover:bg-indigo-50/50 transition border-b border-slate-100 text-[11px]">
@@ -1015,7 +1115,7 @@
             const dataRkpbm = filtered.filter(i => i.jenis === "RKPBMD");
             if (tbodyRkpbm) {
                 if (dataRkpbm.length === 0) {
-                    tbodyRkpbm.innerHTML = `<tr><td colspan="15" class="p-8 text-center text-slate-400 italic">Belum ada usulan RKPBMD Pemeliharaan di Google Spreadsheet.</td></tr>`;
+                    tbodyRkpbm.innerHTML = `<tr><td colspan="15" class="p-8 text-center text-slate-400 italic">Belum ada usulan RKPBMD Pemeliharaan.</td></tr>`;
                 } else {
                     tbodyRkpbm.innerHTML = dataRkpbm.map((item, idx) => `
                         <tr class="hover:bg-amber-50/50 transition border-b border-slate-100 text-[11px]">
@@ -1299,7 +1399,7 @@
         }
 
         // =========================================================================
-        // EKSPOR EXCEL FORMAT RESMI LAMPIRAN PERMENDAGRI NO. 19/2016
+        // EKSPOR EXCEL FORMAT RESMI PERMENDAGRI NO. 19/2016
         // =========================================================================
         function exportOfficialPermendagriExcel() {
             const jenis = document.getElementById('downloadJenisFilter')?.value || "RKBMD";
@@ -1385,4 +1485,3 @@
     </script>
 </body>
 </html>
-```
